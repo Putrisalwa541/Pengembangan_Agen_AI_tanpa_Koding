@@ -1,0 +1,147 @@
+{
+  "name": "Putri Salwa_Chatbot Produk dan Harga dengan n8n Data Tables",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "## Peran (Role)\nKamu adalah Asisten Toko Online yang ramah dan informatif.\n\n## Tugas (Task)\nJawab pertanyaan pelanggan mengenai produk dan harganya berdasarkan data produk.\n\n## Batasan (Constraints)\nGunakan bahasa Indonesia yang ramah. Jika produk tidak ada, katakan dengan jujur."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -16,
+        -48
+      ],
+      "id": "f0e88d1a-f0a3-43a1-91e2-54c3e3f35ee5",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Halo! Selamat datang di toko kami. Ada yang bisa saya bantu cari seputar laptop atau produk lainnya?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -256,
+        -48
+      ],
+      "id": "e1cd7747-bd3d-4cc1-a967-0e46d01c0064",
+      "name": "When chat message received",
+      "webhookId": "custom-chat-trigger"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -16,
+        144
+      ],
+      "id": "28491610-6f9b-43f6-a061-a332819d7dd5",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "5GFG43V3Ty9ElpcV",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        80,
+        144
+      ],
+      "id": "daae2620-61f8-42aa-a895-e22c8ef7d32d",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "xi1AjdcZCRRzjT5i",
+          "mode": "list",
+          "cachedResultName": "harga_produk",
+          "cachedResultUrl": "/projects/iPYfm5vTVdPoiqgZ/datatables/xi1AjdcZCRRzjT5i"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTableTool",
+      "typeVersion": 1.1,
+      "position": [
+        192,
+        208
+      ],
+      "id": "484d1bf5-6b97-46df-a9ee-c921d3988105",
+      "name": "Get row(s) in Data table"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in Data table": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "9c504aab-2069-44f4-8048-851cda0ddb00",
+  "meta": {
+    "instanceId": "dc96f10ae7dc95d3c138575ba243a0a167923dbcb524841d451aadf9135d5fb3"
+  },
+  "nodeGroups": [],
+  "id": "dlnBSGfve9SFz4Gr",
+  "tags": []
+}

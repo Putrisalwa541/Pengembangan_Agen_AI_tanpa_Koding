@@ -1,0 +1,159 @@
+{
+  "name": "Putri Salwa_Tugas 3_Chatbot Kursus SkillMaster Sheets",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "# Garis Besar\nKamu adalah asisten pelatihan SkillMaster Center, yang siap menjawab pertanyaan dengan baik sesuai dengan bahasa yang digunakan penanya.\n\n# Tool\nJawablah pertanyaan tentang produk, deskripsi/uraian, dan biaya/harga pelatihan sesuai dengan informasi yang tersedia dalam Tool Get row(s) in sheet in Google Sheets.\n\n# Batasan\nJika kamu tidak menemukan informasi produk dan harga pelatihan, jangan mengarang jawaban. Berikan jawaban, \"Maaf, saya belum memiliki data yang Anda minta.\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        128,
+        32
+      ],
+      "id": "c31ad1fa-dbb8-4a21-976e-425545133886",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Halo, Kak! Selamat datang di layanan informasi SkillMaster Center. Silakan tanyakan seputar daftar pelatihan, kursus, dan harganya kepada saya ya!",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -160,
+        32
+      ],
+      "id": "4c132c50-27a5-4064-b30b-18b77a59dbba",
+      "name": "When chat message received",
+      "webhookId": "custom-chat-trigger"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        208,
+        272
+      ],
+      "id": "a3bf6917-ccf2-43a1-99b3-41177f132137",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1lKHbmn8SdVVxqeeNyAr3oAoEmum9xZbRi0ItQ6mI6Xg",
+          "mode": "list",
+          "cachedResultName": "Data Kursus SkillMaster Center",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1lKHbmn8SdVVxqeeNyAr3oAoEmum9xZbRi0ItQ6mI6Xg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 598128406,
+          "mode": "list",
+          "cachedResultName": "n8n 1 - Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1lKHbmn8SdVVxqeeNyAr3oAoEmum9xZbRi0ItQ6mI6Xg/edit#gid=598128406"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        336,
+        272
+      ],
+      "id": "5e1e3327-ea54-4367-8bf0-d436de312361",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LQWz2mtPw64TRdNk",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        64,
+        240
+      ],
+      "id": "6f32fa6c-ee9a-438f-9704-ecfce25fea4e",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "5GFG43V3Ty9ElpcV",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "be1d5df7-63e0-4b4c-bdcc-11ed0d782c80",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dc96f10ae7dc95d3c138575ba243a0a167923dbcb524841d451aadf9135d5fb3"
+  },
+  "nodeGroups": [],
+  "id": "3d9obtR3vQVCG7SD",
+  "tags": []
+}
